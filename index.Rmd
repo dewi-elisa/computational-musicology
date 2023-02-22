@@ -15,3 +15,27 @@ library(spotifyr)
 library(plotly)
 ```
 
+Introduction
+=====================================================
+
+Corpus
+---------------------------------------------------------------
+
+
+Track-level features {data-navmenu=Visualisation}
+=====================================================
+### Chart 1
+
+```{r}
+
+```
+
+Chroma features {data-navmenu=Visualisation}
+=====================================================
+
+### Chart 2
+
+```{r}
+
+```
+
