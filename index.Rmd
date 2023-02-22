@@ -1,0 +1,17 @@
+---
+title: "Computational Musicology"
+author: "Dewi Timman"
+date: "`r Sys.Date()`"
+output: 
+  flexdashboard::flex_dashboard:
+    storyboard: true
+    theme: plotly
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+library(spotifyr)
+library(plotly)
+```
+
