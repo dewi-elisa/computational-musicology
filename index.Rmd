@@ -5,7 +5,7 @@ date: "`r Sys.Date()`"
 output: 
   flexdashboard::flex_dashboard:
     storyboard: true
-    theme: plotly
+    theme: "spacelab"
 ---
 
 ```{r setup, include=FALSE}
@@ -15,27 +15,64 @@ library(spotifyr)
 library(plotly)
 ```
 
+```{r corpus setup, include=FALSE}
+corpus <- get_playlist_audio_features("", "3jblLN3iqoULSfQGHAFYVe")
+sleeping_at_last_tracks <- get_artist_audio_features("sleeping at last")
+corpus$sleeping <- ifelse(corpus$track.id %in% sleeping_at_last_tracks$track_id, 1, 0)
+```
+
+
 Introduction
 =====================================================
 
 Corpus
 ---------------------------------------------------------------
+[My corpus](https://open.spotify.com/playlist/3jblLN3iqoULSfQGHAFYVe?si=262d717ca4354192) is a playlist with around 3500 songs. 
+What do all the songs have in common? They are all songs I like. 
+It is a very diverse list with songs ranging from film music to *Shawn Mendes* to *The Sidh* to *Maria Mena*. But there is one specific artist I listen to significantly more than any other artist: *Sleeping At Last*. 
+*Sleeping At Last* is an artist that has all kinds of projects for himself. For example, he makes songs about upcoming astronomical events (*Atronomy* series), or about involuntary human development (*Atlas II* series). He also has a podcast on Spotify about how he makes his songs. 
+*Sleeping At Last* has a thin line with film music. His music can be heard often in films and series. 
+But his music also comes in contact with more popular artists: he has made some covers. Because of these things, he is easy to compare to other songs in the playlist. 
+However, I am not interested in how *Sleeping At Last* compares to the other artists, but I am interested in how he differs from the other songs in the playlist. 
+What makes *Sleeping At Last* *Sleeping At Last*? Why is this the artist I listen to most often? Are there other artists with the same characteristics?
 
+I think that to get an even deeper understanding of the style of *Sleepnig At Last*, there are a few songs that are most interesting to look at. 
+First, one or more *astronomy* songs from *Sleeping At Last*. These are the songs that are very typical for *Sleeping At Last*. Both in the sense of the subject and the kind of music and instruments. 
+Moreover, it would be nice to look at one or more of the songs that are included in a film or TV series and compare it to another song in that film or TV series to see what is so special about this song being there. 
+Furthermore, one or more of his covers can be compared to the original to see how the styles differ and get to know more about this specific style of *Sleeping At Last*. 
 
 Track-level features {data-navmenu=Visualisation}
 =====================================================
-### Chart 1
+### Track-level features
 
-```{r}
+```{r track-level features plot, echo=FALSE}
+plot <- ggplot(corpus) +
+  geom_point(aes(x=valence, y=acousticness, size=danceability, color=instrumentalness), alpha=0.4, shape=21) +
+  geom_rug(aes(x=valence, y=acousticness, color=instrumentalness)) +
+  facet_grid(cols = vars(sleeping), labeller=as_labeller(c(`0`='Other songs', `1`='Sleeping At Last songs'))) +
+  labs(title='Different track-level features of Sleeping At Last songs\ncompared to other songs in the chosen playlist') +
+  scale_color_distiller(palette='PuOr') + 
+  scale_x_continuous(breaks=c(0,0.5,1),limits=c(0,1)) +
+  scale_y_continuous(breaks=c(0,0.5,1), limits=c(0,1))
 
+theme <- theme_minimal() +
+  theme(panel.grid.minor=element_blank(),
+        axis.line=element_line(), 
+        plot.title = element_text(hjust = 0.5))
+
+plot1 <- ggplotly(plot + theme)
+plot1
 ```
+
+
+> In this graphic, the track-level features valence, acousticness, instrumentalness and danceability are shown for the *Sleeping At Last* songs in the playlist compared to the other songs in the playlist. The graphic shows that *Sleeping At Last* songs have a higer acousticness than the other songs in genereal, whereas the valence and danceability tend to be lower. In addition, the proportion of instrumental songs seems to be bigger in the *Sleeping At Last* songs than in the other songs. 
 
 Chroma features {data-navmenu=Visualisation}
 =====================================================
 
 ### Chart 2
 
-```{r}
+```{r, include=FALSE}
 
 ```
 
