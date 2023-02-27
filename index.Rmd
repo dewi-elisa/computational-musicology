@@ -17,7 +17,7 @@ library(compmus)
 library(fontawesome)
 ```
 
-# `r fa("house-chimney")` Introduction
+# `r fa("house-chimney")`  Introduction
 
 ### Introduction
 
@@ -62,6 +62,14 @@ corpus$sleeping <- ifelse(corpus$track.id %in% sleeping_at_last_tracks$track_id,
 <!-- * word cloud met titels -->
 <!-- * volgorde grafiekjes omdraaien: eerst sleeping at last, dan overig -->
 <!-- * andere afstandsmetingen gebruiken in chroma plotje -->
+<!-- * chromatogram -->
+<!-- * flexdash thema -->
+<!-- * titels en assen van plotjes nog een keer checken -->
+
+<!-- Feedback om te verwerken: -->
+<!-- *  Meer verwachtingen in de introductie -->
+<!-- *  The only downside I can think of is that you have so many songs that the size of the danceability gets lost a bit. But I really like the darker clusters in the graph. Think about what they mean and explain them. -->
+<!-- * One plot that might also help, especially with the amount of "Other songs" would be a barplot with the x axis being one of the features and the y axis being the song count or proportions, giving you more insights on the ratios instead of concrete numbers. -->
 
 # What characteristics do _Sleeping At Last_ songs have? {.storyboard data-icon="fa-music"}
 
@@ -93,7 +101,7 @@ In addition, the proportion of instrumental songs seems to be bigger in the _Sle
 
 ### Duration [track-level feature]
 
-```{r duration setup}
+```{r duration setup, include=FALSE}
 corpus <- corpus %>%
   mutate(track.duration_min = track.duration_ms / (1000 * 60))
 
@@ -106,7 +114,7 @@ duration_mean_other <- corpus %>%
   summarize(mean = mean(track.duration_min))
 ```
 
-```{r duration plot}
+```{r duration plot, echo=FALSE}
 colors <- RColorBrewer::brewer.pal(7, "PuOr")
 
 duration <- ggplot(corpus) + 
@@ -167,4 +175,4 @@ In this plot the tempo differences between _Katy Perry_ and _Sleeping At Last_ a
 It can be seen that, although there are some points in the song where both artists have the same tempo, _Katy Perry's_ tempo is a bit faster in general.
 At the end of the song, _Sleeping At Last_ deviates from the original song by skipping over the bridge (starting with "Uh, she's a beast") and repeating 'There's no going back' multiple times.
 
-# `r fa("magnifying-glass")` Results
+# `r fa("magnifying-glass")`  Results
