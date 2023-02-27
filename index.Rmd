@@ -1,11 +1,10 @@
 ---
 title: "Computational Musicology"
 author: "Dewi Timman"
-date: "`r Sys.Date()`"
+date: "`r format(Sys.Date(), '%e %B %Y')`"
 output: 
   flexdashboard::flex_dashboard:
     storyboard: true
-    theme: "spacelab"
     self_contained: false
 ---
 
@@ -15,18 +14,18 @@ library(tidyverse)
 library(spotifyr)
 library(plotly)
 library(compmus)
+library(fontawesome)
 ```
+
+# `r fa("house-chimney")` Introduction
+
+### Introduction
 
 ```{r corpus setup, include=FALSE}
 corpus <- get_playlist_audio_features("", "3jblLN3iqoULSfQGHAFYVe")
-sleeping_at_last_tracks <- get_artist_audio_features("sleeping at last")
-corpus$sleeping <- ifelse(corpus$track.id %in% sleeping_at_last_tracks$track_id, 1, 0)
 ```
 
-
-### Corpus
-
-[My corpus](https://open.spotify.com/playlist/3jblLN3iqoULSfQGHAFYVe?si=262d717ca4354192) is a playlist with around 3500 songs.
+My corpus is a playlist with `r nrow(corpus)` songs.
 What do all the songs have in common?
 They are all songs I like.
 It is a very diverse list with songs ranging from film music to _Shawn Mendes_ to _The Sidh_ to _Maria Mena_.
@@ -50,11 +49,23 @@ Both in the sense of the subject and the kind of music and instruments.
 Moreover, it would be nice to look at one or more of the songs that are included in a film or TV series and compare it to another song in that film or TV series to see what is so special about this song being there.
 Furthermore, one or more of his covers can be compared to the original to see how the styles differ and get to know more about this specific style of _Sleeping At Last_.
 
+```{r corpus setup sleeping at last, include=FALSE}
+sleeping_at_last_tracks <- get_artist_audio_features("sleeping at last")
+corpus$sleeping <- ifelse(corpus$track.id %in% sleeping_at_last_tracks$track_id, 1, 0)
+```
+
 ***
 
 <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/3jblLN3iqoULSfQGHAFYVe?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
 
-### Valence, acousticness, danceability and instrumentalness
+<!-- To do lijstje: -->
+<!-- * word cloud met titels -->
+<!-- * volgorde grafiekjes omdraaien: eerst sleeping at last, dan overig -->
+<!-- * andere afstandsmetingen gebruiken in chroma plotje -->
+
+# What characteristics do _Sleeping At Last_ songs have? {.storyboard data-icon="fa-music"}
+
+### Valence, acousticness, danceability and instrumentalness [track-level features]
 
 ```{r track-level features plot, echo=FALSE}
 plot <- ggplot(corpus) +
@@ -71,8 +82,7 @@ theme <- theme_minimal() +
         axis.line=element_line(), 
         plot.title = element_text(hjust = 0.5))
 
-#ggplotly(plot + theme)
-plot + theme
+ggplotly(plot + theme)
 ```
 
 ***
@@ -81,8 +91,40 @@ In this graphic, the track-level features valence, acousticness, instrumentalnes
 The graphic shows that _Sleeping At Last songs_ have a higer acousticness than the other songs in general, whereas the valence and danceability tend to be lower.
 In addition, the proportion of instrumental songs seems to be bigger in the _Sleeping At Last_ songs than in the other songs.
 
+### Duration [track-level feature]
 
-### Tempo of the song _Dark Horse_ by _Katy Perry_ and _Sleeping At Last_
+```{r duration setup}
+corpus <- corpus %>%
+  mutate(track.duration_min = track.duration_ms / (1000 * 60))
+
+duration_mean_sleeping <- corpus %>%
+  filter(sleeping == 1) %>%
+  summarize(mean = mean(track.duration_min))
+
+duration_mean_other <- corpus %>%
+  filter(sleeping == 0) %>%
+  summarize(mean = mean(track.duration_min))
+```
+
+```{r duration plot}
+colors <- RColorBrewer::brewer.pal(7, "PuOr")
+
+duration <- ggplot(corpus) + 
+  geom_histogram(aes(track.duration_min, y=..density.., color=as.factor(sleeping), fill=as.factor(sleeping)), position="identity", lwd=0.2, alpha=0.6, binwidth=0.25) +
+  geom_vline(xintercept=duration_mean_sleeping$mean, color=colors[7], linetype='dotdash') +
+  geom_vline(xintercept=duration_mean_other$mean, color=colors[1], linetype='dotdash') +
+  scale_color_manual(values=c(colors[1], colors[7]), labels = c("Other songs", "Sleeping At Last songs")) +
+  scale_fill_manual(values=c(colors[2], colors[6]), labels = c("Other songs", "Sleeping At Last songs")) +
+  labs(color='', fill='', x='Duration (min)', y='Relative density')
+
+duration + theme + theme(panel.grid = element_blank(), legend.position=c(0.8,0.8))
+```
+
+***
+
+In this plot it can be seen that the songs from _Sleeping At Last_ are shorter in general in comparison to the other songs in the playlist. He does not have any outliers to the right and has more shorter songs. 
+
+### Tempo of the song _Dark Horse_ by _Katy Perry_ and _Sleeping At Last_ [chroma features]
 
 ```{r chroma corpus setup, echo=FALSE}
 dark_horse_katy <- get_tidy_audio_analysis("4jbmgIyjGoXjY01XxatOx6") %>%
@@ -124,3 +166,5 @@ dark_horse
 In this plot the tempo differences between _Katy Perry_ and _Sleeping At Last_ are shown for the song _Dark Horse_.
 It can be seen that, although there are some points in the song where both artists have the same tempo, _Katy Perry's_ tempo is a bit faster in general.
 At the end of the song, _Sleeping At Last_ deviates from the original song by skipping over the bridge (starting with "Uh, she's a beast") and repeating 'There's no going back' multiple times.
+
+# `r fa("magnifying-glass")` Results
