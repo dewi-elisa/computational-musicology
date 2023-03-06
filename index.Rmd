@@ -15,6 +15,10 @@ library(spotifyr)
 library(plotly)
 library(compmus)
 library(fontawesome)
+library(knitr)
+library(cowplot)
+library(grid)
+library(gridExtra)
 ```
 
 # `r fa("house-chimney")`  Introduction {.storyboard}
@@ -239,9 +243,7 @@ ggplotly(taste_chrom)
 
 What can. we see here?
 
-### Structure of the song _Taste_ from _Sleeping At Last_ [chroma and timbre features] {.storyboard}
-
-#### Self-similarity matrix
+### Structure of the song _Taste_ from _Sleeping At Last_ [chroma and timbre features] {data-commentary-width=450}
 
 ```{r self sim, echo=FALSE}
 norms_timbre <- list("euclidean", "manhattan", "chebyshev")
@@ -295,32 +297,32 @@ self_sim <- bind_rows(
   theme_classic() + 
   labs(x = "", y = "")
 
-ggplotly(self_sim)
+self_sim_ggplotly <- ggplotly(self_sim, domain = list(x=c(0,1), y=c(0.6,1)))
+
+parts <- data.frame(
+  Chroma = c("0:00 - 0:23", "0:23 - 0:49", "0:49 - 1:12", "1:12 - 1:20", "1:20 - 2:28", ""), 
+  Timbre = c("0:00 - 0:23", "0:23 - 1:12", "", "1:12 - 1:20", "1:20 - 1:24", "1:24 - 1:28"),
+  Chroma2 = c("", "2:28 - 3:08", "3:08 - 4:11", "", "4:11 - 4:19", ""), 
+  Timbre2 = c("1:28 - 2:28", "2:28 - 3:08", "3:08 - 3:35", "3:35 - 4:11", "4:11 - 4:19", ""))
+```
+
+```{r subplot, echo=FALSE}
+parts_table <- plot_ly(
+    type = 'table',
+    domain = list(x=c(0,1), y=c(0,0.4)),
+    header = list(values = c("Chroma", "Timbre", "Chroma", "Timbre")),
+    cells = list(values = rbind(parts$Chroma, parts$Timbre, parts$Chroma2, parts$Timbre2), height=25)
+  )
+
+subplot(self_sim_ggplotly, parts_table, nrows=2)
 ```
 
 ***
-
-Note: Still trying out a better styling for this page.
 
 The two self-similarity matrices illustrate pitch- (chroma) and timbre-based self-similarity within the song _Taste_ from _Sleeping At Last_. The song is instrumental so no clear parallel diagonal lines are seen in both graphs. However, a clear structure can be seen. The different parts from both graphs can be seen in the table below.
 
 At the start of the song, a little melody can be heard which continues throughout the whole song. Multiple instruments join this melody. Around 0:23 the piano comes in and the music starts to be louder. This can be seen in both chroma and timbre graphs. Then, around 0:45, some background singing can be heard which leads to a kind of 'explosion' which happens around 0:49. This can be seen in the chroma graph. Around 1:12 the music settles down again which can be seen in both graphs. Around 1:20 drums are introduced which can be seen in the chroma graph. At 1:24 a flute is heard which becomes increasingly louder until the rhythm of the music increases around 1:28 and guitars can be heard clearly (seen in the timbre graph). Until 2:28 some previous parts repeat itself, but no clear difference can be seen. However, at 2:28 the music settles down again and continues slowly (seen in both graphs). Some background singing starts and at the start of the third minute some tension builds up until around 3:08, where a new rhythm starts with different instruments (seen in both graphs). At 3:35 the music continues with some background singing and some flute whistling (seen in the timbre graph) until it reaches 4:11. At this point, the music settles down until it fades away at 4:19 (seen in both graphs).
 
 When the music instruments change, it can be seen that the timbre graph changes. We can see some instrument groups reappearing throughout the music. This can also be heard. You hear a flute and some background music coming and going throughout the song. But also the starting instruments are coming back in the song. However, if there is only a change in melody and not in instruments, we can see the chroma graph changing. This is the case, for example, after one of the 'explosions' you can hear in the song. If the melody as well as the music instruments change, this is shown in both graphs.
-
-#### Clearly visible parts of the song
-
-| Chroma        | Timbre      |
-| ------------- | ----------- |
-| 0:00 - 0:23   | 0:00 - 0:23 |
-| 0:23 - 0:49   | 0:23 - 1:12 |
-| 0:49 - 1:12   | 1:12 - 1:20 |
-| 1:12 - 1:20   | 1:20 - 1:24 |
-| 1:20 - 2:28   | 1:24 - 1:28 |
-| 2:28 - 3:08   | 1:28 - 2:28 |
-| 3:08 - 4:11   | 2:28 - 3:08 |
-| 4:11 - 4:19   | 3:08 - 3:35 |
-|               | 3:35 - 4:11 |
-|               | 4:11 - 4:19 |
 
 # `r fa("magnifying-glass")`  Results
