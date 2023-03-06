@@ -65,6 +65,8 @@ corpus$sleeping <- ifelse(corpus$track.id %in% sleeping_at_last_tracks$track_id,
 <!-- * chromatogram -->
 <!-- * flexdash thema -->
 <!-- * titels en assen van plotjes nog een keer checken -->
+<!-- * in-text linkjes naar alle liedjes -->
+<!-- * {data-commentary-width=400} -->
 
 <!-- Feedback om te verwerken: -->
 <!-- *  Meer verwachtingen in de introductie -->
@@ -134,7 +136,7 @@ In this plot it can be seen that the songs from _Sleeping At Last_ are shorter i
 
 ### Chromagram of the song _Dark Horse_ by _Sleeping At Last_ [chroma features]
 
-```{r}
+```{r chroma sleeping setup, echo=FALSE}
 dark_horse_sleeping <- get_tidy_audio_analysis("1i5PW20LSYwCQMjVQgSXVM") %>%
   select(segments) %>%
   unnest(segments) %>%
@@ -145,7 +147,7 @@ dists_chroma <- list("manhattan", "aitchison", "cosine", "angular")
 summary_chroma <- list("mean", "aitchison_centre", "root_mean_square", "max")
 ```
 
-```{r}
+```{r chroma sleeeping, echo=FALSE}
 dark_horse_sleeping |>
   mutate(pitches = map(pitches, compmus_normalise, norms_chroma[3])) |>
   compmus_gather_chroma() |> 
@@ -169,14 +171,14 @@ In this chromagram the song _Dark Horse_ by _Sleeping At Last_ is shown using th
 
 ### Differences in tempo of the song _Dark Horse_ by _Katy Perry_ and _Sleeping At Last_ [chroma features]
 
-```{r chroma corpus setup, echo=FALSE}
+```{r dtw setup, echo=FALSE}
 dark_horse_katy <- get_tidy_audio_analysis("4jbmgIyjGoXjY01XxatOx6") %>%
   select(segments) %>%
   unnest(segments) %>%
   select(start, duration, pitches)
 ```
 
-```{r chroma plot, echo=FALSE}
+```{r dynamic time warping plot, echo=FALSE}
 dark_horse_dist <- compmus_long_distance(
   dark_horse_katy %>% mutate(pitches = map(pitches, compmus_normalise, norms_chroma[3])),
   dark_horse_sleeping %>% mutate(pitches = map(pitches, compmus_normalise, norms_chroma[3])),
@@ -237,7 +239,9 @@ ggplotly(taste_chrom)
 
 What can. we see here?
 
-### Structure of the song _Taste_ from _Sleeping At Last_ [chroma and timbre features] {data-width=500}
+### Structure of the song _Taste_ from _Sleeping At Last_ [chroma and timbre features] {.storyboard}
+
+#### Self-similarity matrix
 
 ```{r self sim, echo=FALSE}
 norms_timbre <- list("euclidean", "manhattan", "chebyshev")
@@ -296,32 +300,27 @@ ggplotly(self_sim)
 
 ***
 
-The two self-similarity matrices illustrate pitch- (chroma) and timbre-based self-similarity within the song _Taste_ from _Sleeping At Last_. The song is instrumental so no clear parallel diagonal lines are seen in both graphs. However, a clear structure can be seen. In the chroma graph there are a few parts that are clearly visible: 
+Note: Still trying out a better styling for this page.
 
-* 0:00 - 0:23 
-* 0:23 - 0:49 
-* 0:49 - 1:12 
-* 1:12 - 1:20 
-* 1:20 - 2:28 
-* 2:28 - 3:08 
-* 3:08 - 4:11 
-* 4:11 - 4:19 
+The two self-similarity matrices illustrate pitch- (chroma) and timbre-based self-similarity within the song _Taste_ from _Sleeping At Last_. The song is instrumental so no clear parallel diagonal lines are seen in both graphs. However, a clear structure can be seen. The different parts from both graphs can be seen in the table below.
 
-In the timbre graph there are also a few parts that are clearly visible: 
-
-* 0:00 - 0:23
-* 0:23 - 1:12
-* 1:12 - 1:20
-* 1:20 - 1:24
-* 1:24 - 1:28
-* 1:28 - 2:28
-* 2:28 - 3:08
-* 3:08 - 3:35
-* 3:35 - 4:11
-* 4:11 - 4:19
-
-In the song a little melody can be heard which continues throughout the whole song. multiple instruments join this melody. Around 0:23 the piano comes in and the music starts to be louder. Then, around 0:45, some background singing can be heard which leads to a kind of 'explosion' which happens around 0:49. This can be seen in the chroma graph. Around 1:12 the music settles down again which can be seen in both graphs. Around 1:20 drums are introduced which can be seen in the chroma graph. At 1:24 a flute is heard which becomes increasingly louder until the rhythm of the music increases around 1:28 and guitars can be heard clearly (seen in the timbre graph). Until 2:28 some previous parts repeat itself, but no clear difference can be seen. However, at 2:28 the music settles down again and continues slowly (seen in both graphs). Some background singing starts and at the start of the third minute some tension builds up until around 3:08, where a new rhythm starts with different instruments (seen in both graphs). At 3:35 the music continues with some background singing and some flute whistling (seen in the timbre graph) until it reaches 4:11. At this point, the music settles down until it fades away at 4:19 (seen in both graphs).
+At the start of the song, a little melody can be heard which continues throughout the whole song. Multiple instruments join this melody. Around 0:23 the piano comes in and the music starts to be louder. This can be seen in both chroma and timbre graphs. Then, around 0:45, some background singing can be heard which leads to a kind of 'explosion' which happens around 0:49. This can be seen in the chroma graph. Around 1:12 the music settles down again which can be seen in both graphs. Around 1:20 drums are introduced which can be seen in the chroma graph. At 1:24 a flute is heard which becomes increasingly louder until the rhythm of the music increases around 1:28 and guitars can be heard clearly (seen in the timbre graph). Until 2:28 some previous parts repeat itself, but no clear difference can be seen. However, at 2:28 the music settles down again and continues slowly (seen in both graphs). Some background singing starts and at the start of the third minute some tension builds up until around 3:08, where a new rhythm starts with different instruments (seen in both graphs). At 3:35 the music continues with some background singing and some flute whistling (seen in the timbre graph) until it reaches 4:11. At this point, the music settles down until it fades away at 4:19 (seen in both graphs).
 
 When the music instruments change, it can be seen that the timbre graph changes. We can see some instrument groups reappearing throughout the music. This can also be heard. You hear a flute and some background music coming and going throughout the song. But also the starting instruments are coming back in the song. However, if there is only a change in melody and not in instruments, we can see the chroma graph changing. This is the case, for example, after one of the 'explosions' you can hear in the song. If the melody as well as the music instruments change, this is shown in both graphs.
+
+#### Clearly visible parts of the song
+
+| Chroma        | Timbre      |
+| ------------- | ----------- |
+| 0:00 - 0:23   | 0:00 - 0:23 |
+| 0:23 - 0:49   | 0:23 - 1:12 |
+| 0:49 - 1:12   | 1:12 - 1:20 |
+| 1:12 - 1:20   | 1:20 - 1:24 |
+| 1:20 - 2:28   | 1:24 - 1:28 |
+| 2:28 - 3:08   | 1:28 - 2:28 |
+| 3:08 - 4:11   | 2:28 - 3:08 |
+| 4:11 - 4:19   | 3:08 - 3:35 |
+|               | 3:35 - 4:11 |
+|               | 4:11 - 4:19 |
 
 # `r fa("magnifying-glass")`  Results
