@@ -17,7 +17,7 @@ library(compmus)
 library(fontawesome)
 ```
 
-# `r fa("house-chimney")`  Introduction
+# `r fa("house-chimney")`  Introduction {.storyboard}
 
 ### Introduction
 
@@ -77,7 +77,7 @@ corpus$sleeping <- ifelse(corpus$track.id %in% sleeping_at_last_tracks$track_id,
 
 ```{r track-level features plot, echo=FALSE}
 plot <- ggplot(corpus) +
-  geom_point(aes(x=valence, y=acousticness, size=danceability, color=instrumentalness), alpha=0.4, shape=21) +
+  geom_point(aes(x=valence, y=acousticness, size=danceability, color=instrumentalness, text=track.name), alpha=0.4, shape=21) +
   geom_rug(aes(x=valence, y=acousticness, color=instrumentalness)) +
   facet_grid(cols = vars(sleeping), labeller=as_labeller(c(`0`='Other songs', `1`='Sleeping At Last songs'))) +
   labs(title='Different track-level features of Sleeping At Last songs\ncompared to other songs in the chosen playlist') +
@@ -132,14 +132,45 @@ duration + theme + theme(panel.grid = element_blank(), legend.position=c(0.8,0.8
 
 In this plot it can be seen that the songs from _Sleeping At Last_ are shorter in general in comparison to the other songs in the playlist. He does not have any outliers to the right and has more shorter songs. 
 
-### Tempo of the song _Dark Horse_ by _Katy Perry_ and _Sleeping At Last_ [chroma features]
+### Chromagram of the song _Dark Horse_ by _Sleeping At Last_ [chroma features]
 
-```{r chroma corpus setup, echo=FALSE}
-dark_horse_katy <- get_tidy_audio_analysis("4jbmgIyjGoXjY01XxatOx6") %>%
+```{r}
+dark_horse_sleeping <- get_tidy_audio_analysis("1i5PW20LSYwCQMjVQgSXVM") %>%
   select(segments) %>%
   unnest(segments) %>%
   select(start, duration, pitches)
-dark_horse_sleeping <- get_tidy_audio_analysis("1i5PW20LSYwCQMjVQgSXVM") %>%
+
+norms_chroma <- list("euclidean", "manhattan", "chebyshev")
+dists_chroma <- list("manhattan", "aitchison", "cosine", "angular")
+summary_chroma <- list("mean", "aitchison_centre", "root_mean_square", "max")
+```
+
+```{r}
+dark_horse_sleeping |>
+  mutate(pitches = map(pitches, compmus_normalise, norms_chroma[3])) |>
+  compmus_gather_chroma() |> 
+  ggplot(
+    aes(
+      x = start + duration / 2,
+      width = duration,
+      y = pitch_class,
+      fill = value
+    )
+  ) +
+  geom_tile() +
+  labs(x = "Time (s)", y = NULL, fill = "Magnitude") +
+  theme_minimal() +
+  scale_fill_viridis_c()
+```
+
+***
+
+In this chromagram the song _Dark Horse_ by _Sleeping At Last_ is shown using the Chebyshev normalization metric. It can be seen that the notes B, A, F# and C# are played most often. This is not surprising, since the key of the song is in F#. 
+
+### Differences in tempo of the song _Dark Horse_ by _Katy Perry_ and _Sleeping At Last_ [chroma features]
+
+```{r chroma corpus setup, echo=FALSE}
+dark_horse_katy <- get_tidy_audio_analysis("4jbmgIyjGoXjY01XxatOx6") %>%
   select(segments) %>%
   unnest(segments) %>%
   select(start, duration, pitches)
@@ -147,10 +178,10 @@ dark_horse_sleeping <- get_tidy_audio_analysis("1i5PW20LSYwCQMjVQgSXVM") %>%
 
 ```{r chroma plot, echo=FALSE}
 dark_horse_dist <- compmus_long_distance(
-  dark_horse_katy %>% mutate(pitches = map(pitches, compmus_normalise, "manhattan")),
-  dark_horse_sleeping %>% mutate(pitches = map(pitches, compmus_normalise, "manhattan")),
+  dark_horse_katy %>% mutate(pitches = map(pitches, compmus_normalise, norms_chroma[3])),
+  dark_horse_sleeping %>% mutate(pitches = map(pitches, compmus_normalise, norms_chroma[3])),
   feature = pitches,
-  method = "aitchison"
+  method = dists_chroma[2]
 )
 
 dark_horse <- dark_horse_dist %>%
@@ -171,8 +202,126 @@ dark_horse
 
 ***
 
-In this plot the tempo differences between _Katy Perry_ and _Sleeping At Last_ are shown for the song _Dark Horse_.
+In this plot the tempo differences between _Katy Perry_ and _Sleeping At Last_ are shown for the song _Dark Horse_. The more yellow we see, the more different the tempo in the two songs is. 
 It can be seen that, although there are some points in the song where both artists have the same tempo, _Katy Perry's_ tempo is a bit faster in general.
 At the end of the song, _Sleeping At Last_ deviates from the original song by skipping over the bridge (starting with "Uh, she's a beast") and repeating 'There's no going back' multiple times.
+
+### Chromagram of the song _Taste_ from _Sleeping At Last_ [chroma features]
+
+```{r chroma taste, echo=FALSE}
+taste <- get_tidy_audio_analysis("6usFrqlplLLU9OUDq936iE") %>%
+  select(segments) %>%
+  unnest(segments) %>%
+  select(start, duration, pitches)
+
+taste_chrom <- taste |>
+  mutate(pitches = map(pitches, compmus_normalise, norms_chroma[3])) |>
+  compmus_gather_chroma() |> 
+  ggplot(
+    aes(
+      x = start + duration / 2,
+      width = duration,
+      y = pitch_class,
+      fill = value
+    )
+  ) +
+  geom_tile() +
+  labs(x = "Time (s)", y = NULL, fill = "Magnitude") +
+  theme_minimal() +
+  scale_fill_viridis_c()
+
+ggplotly(taste_chrom)
+```
+
+***
+
+What can. we see here?
+
+### Structure of the song _Taste_ from _Sleeping At Last_ [chroma and timbre features] {data-width=500}
+
+```{r self sim, echo=FALSE}
+norms_timbre <- list("euclidean", "manhattan", "chebyshev")
+dists_timbre <- list("euclidean", "cosine", "angular")
+summary_timbre <- list("mean", "root_mean_square")
+
+taste2 <-
+  get_tidy_audio_analysis("6usFrqlplLLU9OUDq936iE") |>
+  compmus_align(bars, segments) |>
+  select(bars) |>
+  unnest(bars) |>
+  mutate(
+    pitches =
+      map(segments,
+        compmus_summarise, pitches,
+        method = summary_chroma[4], norm = norms_chroma[3]
+      )
+  ) |>
+  mutate(
+    timbre =
+      map(segments,
+        compmus_summarise, timbre,
+        method = summary_timbre[1]
+      )
+  )
+```
+
+```{r self sim matrices, echo=FALSE}
+self_sim <- bind_rows(
+  taste2 |> 
+    compmus_self_similarity(pitches, dists_chroma[1]) |> 
+    mutate(d = d / max(d), type = "Chroma"),
+  taste2 |> 
+    compmus_self_similarity(timbre, dists_timbre[2]) |> 
+    mutate(d = d / max(d), type = "Timbre")
+) |>
+  mutate() |> 
+  ggplot(
+    aes(
+      x = xstart + xduration / 2,
+      width = xduration,
+      y = ystart + yduration / 2,
+      height = yduration,
+      fill = d
+    )
+  ) +
+  geom_tile() +
+  coord_fixed() +
+  facet_wrap(~type) +
+  scale_fill_viridis_c(option = "E", guide = "none") +
+  theme_classic() + 
+  labs(x = "", y = "")
+
+ggplotly(self_sim)
+```
+
+***
+
+The two self-similarity matrices illustrate pitch- (chroma) and timbre-based self-similarity within the song _Taste_ from _Sleeping At Last_. The song is instrumental so no clear parallel diagonal lines are seen in both graphs. However, a clear structure can be seen. In the chroma graph there are a few parts that are clearly visible: 
+
+* 0:00 - 0:23 
+* 0:23 - 0:49 
+* 0:49 - 1:12 
+* 1:12 - 1:20 
+* 1:20 - 2:28 
+* 2:28 - 3:08 
+* 3:08 - 4:11 
+* 4:11 - 4:19 
+
+In the timbre graph there are also a few parts that are clearly visible: 
+
+* 0:00 - 0:23
+* 0:23 - 1:12
+* 1:12 - 1:20
+* 1:20 - 1:24
+* 1:24 - 1:28
+* 1:28 - 2:28
+* 2:28 - 3:08
+* 3:08 - 3:35
+* 3:35 - 4:11
+* 4:11 - 4:19
+
+In the song a little melody can be heard which continues throughout the whole song. multiple instruments join this melody. Around 0:23 the piano comes in and the music starts to be louder. Then, around 0:45, some background singing can be heard which leads to a kind of 'explosion' which happens around 0:49. This can be seen in the chroma graph. Around 1:12 the music settles down again which can be seen in both graphs. Around 1:20 drums are introduced which can be seen in the chroma graph. At 1:24 a flute is heard which becomes increasingly louder until the rhythm of the music increases around 1:28 and guitars can be heard clearly (seen in the timbre graph). Until 2:28 some previous parts repeat itself, but no clear difference can be seen. However, at 2:28 the music settles down again and continues slowly (seen in both graphs). Some background singing starts and at the start of the third minute some tension builds up until around 3:08, where a new rhythm starts with different instruments (seen in both graphs). At 3:35 the music continues with some background singing and some flute whistling (seen in the timbre graph) until it reaches 4:11. At this point, the music settles down until it fades away at 4:19 (seen in both graphs).
+
+When the music instruments change, it can be seen that the timbre graph changes. We can see some instrument groups reappearing throughout the music. This can also be heard. You hear a flute and some background music coming and going throughout the song. But also the starting instruments are coming back in the song. However, if there is only a change in melody and not in instruments, we can see the chroma graph changing. This is the case, for example, after one of the 'explosions' you can hear in the song. If the melody as well as the music instruments change, this is shown in both graphs.
 
 # `r fa("magnifying-glass")`  Results
