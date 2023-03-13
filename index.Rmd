@@ -166,6 +166,8 @@ key_templates <-
 ```
 
 ```{r keychram corpus setup, echo=FALSE}
+astronomy_key <- get_track_audio_features("4kZhLfs3nsJu8JBqEXdxNW")$key
+
 astronomy <-
   get_tidy_audio_analysis("4kZhLfs3nsJu8JBqEXdxNW") |>
   compmus_align(sections, segments) |>
@@ -198,9 +200,34 @@ astronomy |>
 
 ***
 
-This is a keygram from one of _Sleeping At Lasts_ astronomy songs: [_June 24, 2022: Parade of Planets_](https://open.spotify.com/track/4kZhLfs3nsJu8JBqEXdxNW?si=f5fa16753a9a4176). It is a song about the planetary alignment that could be observed on June 24, 2022. Seven of the planets could be seen aligned in the sky around that time. There also is a [podcast episode about this song](https://open.spotify.com/episode/2FVj0AD4PNPHee0cHS6MDr?si=f8badc32e4bb4e81) in which the artist tells that every planet has its own melody and they come together in this song. The piano, violin and cello are heard throughout the song and connect everything. 
+This is a keygram from one of _Sleeping At Lasts_ astronomy songs: [_June 24, 2022: Parade of Planets_](https://open.spotify.com/track/4kZhLfs3nsJu8JBqEXdxNW?si=f5fa16753a9a4176). According to Spotify, the key in general is B. It is a song about the planetary alignment that could be observed on June 24, 2022. Seven of the planets could be seen aligned in the sky around that time. There also is a [podcast episode about this song](https://open.spotify.com/episode/2FVj0AD4PNPHee0cHS6MDr?si=f8badc32e4bb4e81) in which the artist tells that every planet has its own melody and they come together in this song. The piano, violin and cello are heard throughout the song and connect everything. 
 
-The song starts in B major. Then, around 1:40 it is unclear what the key of that section is. Maybe the variety of instruments (piano, cello and violin) and melodies makes Spotify wondering what the key is. A bit after two minutes there is a change in key: the song changes to C# minor. This change can also be heard in the song: first a violin and a piano are playing and then the song changes to cello, piano and singing. Especially the singing makes the song sound different. Then, approximately 30 seconds later, it becomes unclear again what the keys of the sections are. We can hear the same instruments and melody as the last time this happened. This also finalizes the song.
+When we take a closer look at the song, it can be seen that the song starts in B major. Then, around 1:40 it is unclear what the key of that section is. Maybe the variety of instruments (piano, cello and violin) and melodies makes Spotify wondering what the key is. A bit after two minutes there is a change in key: the song changes to C# minor. This change can also be heard in the song: first a violin and a piano are playing and then the song changes to cello, piano and singing. Especially the singing makes the song sound different. Then, approximately 30 seconds later, it becomes unclear again what the keys of the sections are. We can hear the same instruments and melody as the last time this happened. This also finalizes the song.
+
+### Histogram of keys [track-level features]
+
+```{r histogram keys, echo=FALSE}
+colors <- RColorBrewer::brewer.pal(7, "PuOr")
+labels <- c('C','C#/Db','D','D#/Eb','E','F','F#/Gb','G','G#/Ab','A','A#/Bb','B')
+
+duration <- ggplot(corpus) + 
+  geom_histogram(aes(key, y=..density.., color=as.factor(sleeping), fill=as.factor(sleeping)), position="identity", lwd=0.2, alpha=0.6, binwidth=1) +
+  scale_color_manual(values=c(colors[1], colors[7]), labels = c("Other songs", "Sleeping At Last songs")) +
+  scale_fill_manual(values=c(colors[2], colors[6]), labels = c("Other songs", "Sleeping At Last songs")) +
+  scale_x_continuous(breaks=0:11, labels=labels) +
+  labs(color='', fill='', x='Key', y='Relative density')
+
+theme <- theme_minimal() +
+  theme(panel.grid.minor=element_blank(),
+        axis.line=element_line(), 
+        plot.title = element_text(hjust = 0.5))
+
+duration + theme + theme(panel.grid = element_blank(), legend.position=c(0.8,0.8))
+```
+
+***
+
+In this histogram it can be seen that _Sleeping At Last_ has more songs in the C and D#/Eb keys and less songs in the C#/Db, D, E, and A keys in general. 
 
 ### Valence, acousticness, danceability and instrumentalness [track-level features]
 
@@ -228,7 +255,7 @@ In this graphic, the track-level features valence, acousticness, instrumentalnes
 The graphic shows that _Sleeping At Last songs_ have a higer acousticness than the other songs in general, whereas the valence and danceability tend to be lower.
 In addition, the proportion of instrumental songs seems to be bigger in the _Sleeping At Last_ songs than in the other songs.
 
-### Duration [track-level feature]
+### Duration [track-level features]
 
 ```{r duration setup, include=FALSE}
 corpus <- corpus %>%
