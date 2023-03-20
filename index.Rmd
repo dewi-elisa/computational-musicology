@@ -15,6 +15,7 @@ library(spotifyr)
 library(plotly)
 library(compmus)
 library(fontawesome)
+library(gridExtra)
 ```
 
 # `r fa("house-chimney")`  Introduction {.storyboard}
@@ -67,6 +68,7 @@ corpus$sleeping <- ifelse(corpus$track.id %in% sleeping_at_last_tracks$track_id,
 <!-- * titels en assen van plotjes nog een keer checken -->
 <!-- * in-text linkjes naar alle liedjes -->
 <!-- * {data-commentary-width=400} -->
+<!-- * alle songs embedden -->
 
 <!-- Feedback om te verwerken: -->
 <!-- *  Meer verwachtingen in de introductie -->
@@ -74,6 +76,261 @@ corpus$sleeping <- ifelse(corpus$track.id %in% sleeping_at_last_tracks$track_id,
 <!-- * One plot that might also help, especially with the amount of "Other songs" would be a barplot with the x axis being one of the features and the y axis being the song count or proportions, giving you more insights on the ratios instead of concrete numbers. -->
 
 # What characteristics do _Sleeping At Last_ songs have? {.storyboard data-icon="fa-music"}
+
+### Tempogram of the Atom series [temporal features]
+
+```{r atom 1 setup, include=FALSE}
+atom1 <- get_tidy_audio_analysis("0NyBxQlgLlq6YgGEuDKekc")
+```
+
+```{r atom 1 tempogram, include=FALSE}
+atom1_plot <- atom1 |>
+  tempogram(window_size = 8, hop_size = 1, cyclic = FALSE) |>
+  ggplot(aes(x = time, y = bpm, fill = power)) +
+  geom_raster() +
+  scale_fill_viridis_c(guide = "none") +
+  labs(x = "Time (s)", y = "Tempo (BPM)", title="Atom 1") +
+  theme_classic() +
+  theme(plot.title = element_text(size=6, hjust=0.5), axis.title=element_text(size=6))
+atom1_plot
+```
+
+```{r atom 2 setup, include=FALSE}
+atom2 <- get_tidy_audio_analysis('47kqm43MxG45HEdGVudXxK')
+```
+
+```{r atom 2 tempogram, include=FALSE}
+atom2_plot <- atom2 |>
+  tempogram(window_size = 8, hop_size = 1, cyclic = FALSE) |>
+  ggplot(aes(x = time, y = bpm, fill = power)) +
+  geom_raster() +
+  scale_fill_viridis_c(guide = "none") +
+  labs(x = "Time (s)", y = "Tempo (BPM)", title="Atom 2") +
+  theme_classic() +
+  theme(plot.title = element_text(size=6, hjust=0.5), axis.title=element_text(size=6))
+
+atom2_plot
+```
+
+```{r atom 3 setup, include=FALSE}
+atom3 <- get_tidy_audio_analysis('5rlcAcJfUzssBjfZryvmRS')
+```
+
+```{r atom 3 tempogram, include=FALSE}
+atom3_plot <- atom3 |>
+  tempogram(window_size = 8, hop_size = 1, cyclic = FALSE) |>
+  ggplot(aes(x = time, y = bpm, fill = power)) +
+  geom_raster() +
+  scale_fill_viridis_c(guide = "none") +
+  labs(x = "Time (s)", y = "Tempo (BPM)", title="Atom 3") +
+  theme_classic() +
+  theme(plot.title = element_text(size=6, hjust=0.5), axis.title=element_text(size=6))
+atom3_plot
+```
+
+```{r atom 4 setup, include=FALSE}
+atom4 <- get_tidy_audio_analysis('3OQumqHQWrrRmCMlONe51e')
+```
+
+```{r atom 4 tempogram, include=FALSE}
+atom4_plot <- atom4 |>
+  tempogram(window_size = 8, hop_size = 1, cyclic = FALSE) |>
+  ggplot(aes(x = time, y = bpm, fill = power)) +
+  geom_raster() +
+  scale_fill_viridis_c(guide = "none") +
+  labs(x = "Time (s)", y = "Tempo (BPM)", title="Atom 4") +
+  theme_classic() +
+  theme(plot.title = element_text(size=6, hjust=0.5), axis.title=element_text(size=6))
+atom4_plot
+```
+
+```{r atom 5 setup, include=FALSE}
+atom5 <- get_tidy_audio_analysis('3zjpAA7IC5Hfm9hvBad86i')
+```
+
+```{r atom 5 tempogram, include=FALSE}
+atom5_plot <- atom5 |>
+  tempogram(window_size = 8, hop_size = 1, cyclic = FALSE) |>
+  ggplot(aes(x = time, y = bpm, fill = power)) +
+  geom_raster() +
+  scale_fill_viridis_c(guide = "none") +
+  labs(x = "Time (s)", y = "Tempo (BPM)", title="Atom 5") +
+  theme_classic() +
+  theme(plot.title = element_text(size=6, hjust=0.5), axis.title=element_text(size=6))
+atom5_plot
+```
+
+```{r atom 6 setup, include=FALSE}
+atom6 <- get_tidy_audio_analysis('4Hctp8jfbMwLTchI6o3vDc')
+```
+
+```{r atom 6 tempogram, include=FALSE}
+atom6_plot <- atom6 |>
+  tempogram(window_size = 8, hop_size = 1, cyclic = FALSE) |>
+  ggplot(aes(x = time, y = bpm, fill = power)) +
+  geom_raster() +
+  scale_fill_viridis_c(guide = "none") +
+  labs(x = "Time (s)", y = "Tempo (BPM)", title="Atom 6") +
+  theme_classic() +
+  theme(plot.title = element_text(size=6, hjust=0.5), axis.title=element_text(size=6))
+atom6_plot
+```
+
+```{r atom 7 setup, include=FALSE}
+atom7 <- get_tidy_audio_analysis('3KD3qVfZd6C7ERAaCYkhTn')
+```
+
+```{r atom 7 tempogram, include=FALSE}
+atom7_plot <- atom7 |>
+  tempogram(window_size = 8, hop_size = 1, cyclic = FALSE) |>
+  ggplot(aes(x = time, y = bpm, fill = power)) +
+  geom_raster() +
+  scale_fill_viridis_c(guide = "none") +
+  labs(x = "Time (s)", y = "Tempo (BPM)", title="Atom 7") +
+  theme_classic() +
+  theme(plot.title = element_text(size=6, hjust=0.5), axis.title=element_text(size=6))
+atom7_plot
+```
+
+```{r atom 8 setup, include=FALSE}
+atom8 <- get_tidy_audio_analysis('3HOe1ZIcGx29Q8SGaYmDH2')
+```
+
+```{r atom 8 tempogram, include=FALSE}
+atom8_plot <- atom8 |>
+  tempogram(window_size = 8, hop_size = 1, cyclic = FALSE) |>
+  ggplot(aes(x = time, y = bpm, fill = power)) +
+  geom_raster() +
+  scale_fill_viridis_c(guide = "none") +
+  labs(x = "Time (s)", y = "Tempo (BPM)", title="Atom 8") +
+  theme_classic() +
+  theme(plot.title = element_text(size=6, hjust=0.5), axis.title=element_text(size=6))
+atom8_plot
+```
+
+```{r atom 9 setup, include=FALSE}
+atom9 <- get_tidy_audio_analysis('2flsa9qZKC4j6oAKwoBZc0')
+```
+
+```{r atom 9 tempogram, include=FALSE}
+atom9_plot <- atom9 |>
+  tempogram(window_size = 8, hop_size = 1, cyclic = FALSE) |>
+  ggplot(aes(x = time, y = bpm, fill = power)) +
+  geom_raster() +
+  scale_fill_viridis_c(guide = "none") +
+  labs(x = "Time (s)", y = "Tempo (BPM)", title="Atom 9") +
+  theme_classic() +
+  theme(plot.title = element_text(size=6, hjust=0.5), axis.title=element_text(size=6))
+atom9_plot
+```
+
+```{r tempograms, echo=FALSE}
+grid.arrange(atom1_plot, atom2_plot, atom3_plot, atom4_plot, atom5_plot, atom6_plot, atom7_plot, atom8_plot, atom9_plot, nrow=3)
+```
+
+***
+
+[Atom 1](https://open.spotify.com/track/0NyBxQlgLlq6YgGEuDKekc?si=4689e7870942468d)
+[Podcast](https://open.spotify.com/episode/6OZiHVUheBuPuO5vwyZ6Pe?si=4db17a2cab27437a)
+(to be updated)
+
+In the _Atoms_ series, _Sleeping At Last_ tries to catch small interesting events and turns them in a song of approximately one minute.
+
+In _Atom 1_, we hear a lof of different sounds coming together. It can be heard that the tempo is certianly not constant. This can also be seen in the tempogram.
+
+In _Atom 2_, a melody that is constant in tempo can be heard in the first sixteen seconds. This can also be seen in the tempogram: there is a horizontal line at 400 BPM. After this singing comes in. After each sentence, there is a little instrumental part again, which can also be found in the tempogram. This are the little horizontal lines on that same 400 BPM. The singing can also be found in the tempogram, but at a bit higher level and is not as constant as the instrumental parts.
+
+In _Atom 3_, _Atom 4_ and _Atom 8_, a melody is heard that repeats itself multiple times. This melody slows down and accelerates a bit, but is approximately the same tempo. This can be seen in the tempograms by the 'curly' horizontal lines. 
+
+In _Atom 5_, in the first 5 to 20 seconds we can hear a violin playing. The violin plays with a constant tempo: there is a clear horizontal line in the tempogram. However, after twenty seconds, a cello starts playing and the tempo becomes irregular.
+
+In _Atom 6_, the first 40 seconds are a bit unclear concearning tempo. However, around 40 seconds a flute and a piano can be heard. Those two instruments have a clear very clear tempo, wich can also be seen by the horizontal line that starts around that time. This stays untill the end of the song. 
+
+In _Atom 7_ and _Atom 9_, a clear melody can be heard throughout the whole song. Around this melody, the rest of the song is made. The melody has a clear tempo which can also be seen in the tempograms. 
+
+### Tempogram of _Hearing_ [temporal features]
+
+```{r hearing setup, echo=FALSE}
+hearing <- get_tidy_audio_analysis('13Z3uZXTFpbLBZ8R1rTUKO')
+```
+
+```{r hearing tempogram, echo=FALSE}
+hearing |>
+  tempogram(window_size = 8, hop_size = 1, cyclic = FALSE) |>
+  ggplot(aes(x = time, y = bpm, fill = power)) +
+  geom_raster() +
+  scale_fill_viridis_c(guide = "none") +
+  labs(x = "Time (s)", y = "Tempo (BPM)") +
+  theme_classic()
+```
+
+***
+
+The song _Hearing_ is part of _Sleeping At Lasts_ Atlas series. In this series ... (to be updated with background info).
+In the song there is a melody that repeats itself the whole song. However, this melody does not have a constant tempo. The tempo calculated by Spotify probably listens to the stringed instruments. Around 2:40 until a bit after 3:00, the string instruments deviate from the melody which can be seen in the tempogram. 
+
+### Tempogram _Everything she does is magic_ by _Sleeping At Last
+```{r magic setup, echo=FALSE}
+magic <- get_tidy_audio_analysis('3cBtANnJGopPaRMXCl3mV7')
+```
+
+```{r magic tempogram, echo=FALSE}
+magic |>
+  tempogram(window_size = 8, hop_size = 1, cyclic = FALSE) |>
+  ggplot(aes(x = time, y = bpm, fill = power)) +
+  geom_raster() +
+  scale_fill_viridis_c(guide = "none") +
+  labs(x = "Time (s)", y = "Tempo (BPM)") +
+  theme_classic()
+```
+
+***
+
+In the song _Everything she does is magic_ from _Sleeping At Last_, we can see the tempo stays mostly at a constant tempo. This is probably because of the piano in the background which plays at the same tempo a lot.
+
+### Unrelated but might be fun [temporal features]
+
+```{r opus setup, echo=FALSE}
+opus <- get_tidy_audio_analysis('3v2oAQomhOcYCPPHafS3KV')
+```
+
+```{r opus tempogram, echo=FALSE}
+opus |>
+  tempogram(window_size = 8, hop_size = 1, cyclic = FALSE) |>
+  ggplot(aes(x = time, y = bpm, fill = power)) +
+  geom_raster() +
+  scale_fill_viridis_c(guide = "none") +
+  labs(x = "Time (s)", y = "Tempo (BPM)") +
+  theme_classic()
+```
+
+***
+
+In the song [_Opus_](https://open.spotify.com/track/3v2oAQomhOcYCPPHafS3KV?si=31511facd0814140) from _Eric Prydz_ there is a beat building up until approximately three minutes. Then, it stays constant. Around 3:40, 4:50, 5:40, and 6:20 it feels like the beat is falling again, but this is not the case untill it does around 6:40. This can all be seen in the tempogram. There are also a lot of suboctaves that can be seen. 
+
+### Histogram of tempi [track-level features]
+
+```{r tempo histogram, echo=FALSE}
+colors <- RColorBrewer::brewer.pal(7, "PuOr")
+labels <- c('C','C#/Db','D','D#/Eb','E','F','F#/Gb','G','G#/Ab','A','A#/Bb','B')
+
+tempo <- ggplot(corpus) + 
+  geom_histogram(aes(tempo, y=..density.., color=as.factor(sleeping), fill=as.factor(sleeping)), position="identity", lwd=0.2, alpha=0.6, binwidth=10) +
+  scale_color_manual(values=c(colors[1], colors[7]), labels = c("Other songs", "Sleeping At Last songs")) +
+  scale_fill_manual(values=c(colors[2], colors[6]), labels = c("Other songs", "Sleeping At Last songs")) +
+  labs(color='', fill='', x='Tempo', y='Relative density')
+
+theme <- theme_minimal() +
+  theme(panel.grid.minor=element_blank(),
+        axis.line=element_line(), 
+        plot.title = element_text(hjust = 0.5))
+
+tempo + theme + theme(panel.grid = element_blank(), legend.position=c(0.8,0.9))
+```
+
+***
+
+In this histogram it can be seen that _Sleeping At Last_ has more songs with a tempo lower than 80 and with a tempo between 120 and 160 in general when comparing it with the other songs in the playlist. 
 
 ### Keygram of _June 24, 2022: Parade of Planets_ [tonal analysis]
 
@@ -476,3 +733,5 @@ At the start of the song, a little melody can be heard which continues throughou
 When the music instruments change, it can be seen that the timbre graph changes. We can see some instrument groups reappearing throughout the music. This can also be heard. You hear a flute and some background music coming and going throughout the song. But also the starting instruments are coming back in the song. However, if there is only a change in melody and not in instruments, we can see the chroma graph changing. This is the case, for example, after one of the 'explosions' you can hear in the song. If the melody as well as the music instruments change, this is shown in both graphs.
 
 # `r fa("magnifying-glass")`  Results
+
+SAL does not have many regular tempo songs.
