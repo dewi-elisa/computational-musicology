@@ -23,7 +23,7 @@ library(gridExtra)
 ### Introduction
 
 ```{r corpus setup, include=FALSE}
-corpus <- get_playlist_audio_features("", "3jblLN3iqoULSfQGHAFYVe")
+corpus <- readRDS(file = "data/corpus.RDS")
 ```
 
 My corpus is a playlist with `r nrow(corpus)` songs.
@@ -50,11 +50,6 @@ Both in the sense of the subject and the kind of music and instruments.
 Moreover, it would be nice to look at one or more of the songs that are included in a film or TV series and compare it to another song in that film or TV series to see what is so special about this song being there.
 Furthermore, one or more of his covers can be compared to the original to see how the styles differ and get to know more about this specific style of _Sleeping At Last_.
 
-```{r corpus setup sleeping at last, include=FALSE}
-sleeping_at_last_tracks <- get_artist_audio_features("sleeping at last")
-corpus$sleeping <- ifelse(corpus$track.id %in% sleeping_at_last_tracks$track_id, 1, 0)
-```
-
 ***
 
 <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/3jblLN3iqoULSfQGHAFYVe?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
@@ -79,153 +74,19 @@ corpus$sleeping <- ifelse(corpus$track.id %in% sleeping_at_last_tracks$track_id,
 
 ### Tempogram of the Atom series [temporal features]
 
-```{r atom 1 setup, include=FALSE}
-atom1 <- get_tidy_audio_analysis("0NyBxQlgLlq6YgGEuDKekc")
-```
+```{r atom tempogram, echo=FALSE}
+atom1_plot <- readRDS(file = "data/atom1.RDS")
+atom2_plot <- readRDS(file = "data/atom2.RDS")
+atom3_plot <- readRDS(file = "data/atom3.RDS")
+atom4_plot <- readRDS(file = "data/atom4.RDS")
+atom5_plot <- readRDS(file = "data/atom5.RDS")
+atom6_plot <- readRDS(file = "data/atom6.RDS")
+atom7_plot <- readRDS(file = "data/atom7.RDS")
+atom8_plot <- readRDS(file = "data/atom8.RDS")
+atom9_plot <- readRDS(file = "data/atom9.RDS")
 
-```{r atom 1 tempogram, include=FALSE}
-atom1_plot <- atom1 |>
-  tempogram(window_size = 8, hop_size = 1, cyclic = FALSE) |>
-  ggplot(aes(x = time, y = bpm, fill = power)) +
-  geom_raster() +
-  scale_fill_viridis_c(guide = "none") +
-  labs(x = "Time (s)", y = "Tempo (BPM)", title="Atom 1") +
-  theme_classic() +
-  theme(plot.title = element_text(size=6, hjust=0.5), axis.title=element_text(size=6))
-atom1_plot
-```
-
-```{r atom 2 setup, include=FALSE}
-atom2 <- get_tidy_audio_analysis('47kqm43MxG45HEdGVudXxK')
-```
-
-```{r atom 2 tempogram, include=FALSE}
-atom2_plot <- atom2 |>
-  tempogram(window_size = 8, hop_size = 1, cyclic = FALSE) |>
-  ggplot(aes(x = time, y = bpm, fill = power)) +
-  geom_raster() +
-  scale_fill_viridis_c(guide = "none") +
-  labs(x = "Time (s)", y = "Tempo (BPM)", title="Atom 2") +
-  theme_classic() +
-  theme(plot.title = element_text(size=6, hjust=0.5), axis.title=element_text(size=6))
-
-atom2_plot
-```
-
-```{r atom 3 setup, include=FALSE}
-atom3 <- get_tidy_audio_analysis('5rlcAcJfUzssBjfZryvmRS')
-```
-
-```{r atom 3 tempogram, include=FALSE}
-atom3_plot <- atom3 |>
-  tempogram(window_size = 8, hop_size = 1, cyclic = FALSE) |>
-  ggplot(aes(x = time, y = bpm, fill = power)) +
-  geom_raster() +
-  scale_fill_viridis_c(guide = "none") +
-  labs(x = "Time (s)", y = "Tempo (BPM)", title="Atom 3") +
-  theme_classic() +
-  theme(plot.title = element_text(size=6, hjust=0.5), axis.title=element_text(size=6))
-atom3_plot
-```
-
-```{r atom 4 setup, include=FALSE}
-atom4 <- get_tidy_audio_analysis('3OQumqHQWrrRmCMlONe51e')
-```
-
-```{r atom 4 tempogram, include=FALSE}
-atom4_plot <- atom4 |>
-  tempogram(window_size = 8, hop_size = 1, cyclic = FALSE) |>
-  ggplot(aes(x = time, y = bpm, fill = power)) +
-  geom_raster() +
-  scale_fill_viridis_c(guide = "none") +
-  labs(x = "Time (s)", y = "Tempo (BPM)", title="Atom 4") +
-  theme_classic() +
-  theme(plot.title = element_text(size=6, hjust=0.5), axis.title=element_text(size=6))
-atom4_plot
-```
-
-```{r atom 5 setup, include=FALSE}
-atom5 <- get_tidy_audio_analysis('3zjpAA7IC5Hfm9hvBad86i')
-```
-
-```{r atom 5 tempogram, include=FALSE}
-atom5_plot <- atom5 |>
-  tempogram(window_size = 8, hop_size = 1, cyclic = FALSE) |>
-  ggplot(aes(x = time, y = bpm, fill = power)) +
-  geom_raster() +
-  scale_fill_viridis_c(guide = "none") +
-  labs(x = "Time (s)", y = "Tempo (BPM)", title="Atom 5") +
-  theme_classic() +
-  theme(plot.title = element_text(size=6, hjust=0.5), axis.title=element_text(size=6))
-atom5_plot
-```
-
-```{r atom 6 setup, include=FALSE}
-atom6 <- get_tidy_audio_analysis('4Hctp8jfbMwLTchI6o3vDc')
-```
-
-```{r atom 6 tempogram, include=FALSE}
-atom6_plot <- atom6 |>
-  tempogram(window_size = 8, hop_size = 1, cyclic = FALSE) |>
-  ggplot(aes(x = time, y = bpm, fill = power)) +
-  geom_raster() +
-  scale_fill_viridis_c(guide = "none") +
-  labs(x = "Time (s)", y = "Tempo (BPM)", title="Atom 6") +
-  theme_classic() +
-  theme(plot.title = element_text(size=6, hjust=0.5), axis.title=element_text(size=6))
-atom6_plot
-```
-
-```{r atom 7 setup, include=FALSE}
-atom7 <- get_tidy_audio_analysis('3KD3qVfZd6C7ERAaCYkhTn')
-```
-
-```{r atom 7 tempogram, include=FALSE}
-atom7_plot <- atom7 |>
-  tempogram(window_size = 8, hop_size = 1, cyclic = FALSE) |>
-  ggplot(aes(x = time, y = bpm, fill = power)) +
-  geom_raster() +
-  scale_fill_viridis_c(guide = "none") +
-  labs(x = "Time (s)", y = "Tempo (BPM)", title="Atom 7") +
-  theme_classic() +
-  theme(plot.title = element_text(size=6, hjust=0.5), axis.title=element_text(size=6))
-atom7_plot
-```
-
-```{r atom 8 setup, include=FALSE}
-atom8 <- get_tidy_audio_analysis('3HOe1ZIcGx29Q8SGaYmDH2')
-```
-
-```{r atom 8 tempogram, include=FALSE}
-atom8_plot <- atom8 |>
-  tempogram(window_size = 8, hop_size = 1, cyclic = FALSE) |>
-  ggplot(aes(x = time, y = bpm, fill = power)) +
-  geom_raster() +
-  scale_fill_viridis_c(guide = "none") +
-  labs(x = "Time (s)", y = "Tempo (BPM)", title="Atom 8") +
-  theme_classic() +
-  theme(plot.title = element_text(size=6, hjust=0.5), axis.title=element_text(size=6))
-atom8_plot
-```
-
-```{r atom 9 setup, include=FALSE}
-atom9 <- get_tidy_audio_analysis('2flsa9qZKC4j6oAKwoBZc0')
-```
-
-```{r atom 9 tempogram, include=FALSE}
-atom9_plot <- atom9 |>
-  tempogram(window_size = 8, hop_size = 1, cyclic = FALSE) |>
-  ggplot(aes(x = time, y = bpm, fill = power)) +
-  geom_raster() +
-  scale_fill_viridis_c(guide = "none") +
-  labs(x = "Time (s)", y = "Tempo (BPM)", title="Atom 9") +
-  theme_classic() +
-  theme(plot.title = element_text(size=6, hjust=0.5), axis.title=element_text(size=6))
-atom9_plot
-```
-
-```{r tempograms, echo=FALSE}
-grid.arrange(atom1_plot, atom2_plot, atom3_plot, atom4_plot, atom5_plot, atom6_plot, atom7_plot, atom8_plot, atom9_plot, nrow=3)
+atoms_plot <- grid.arrange(atom1_plot, atom2_plot, atom3_plot, atom4_plot, atom5_plot, atom6_plot, atom7_plot, atom8_plot, atom9_plot, nrow=3)
+atoms_plot
 ```
 
 ***
@@ -236,7 +97,7 @@ grid.arrange(atom1_plot, atom2_plot, atom3_plot, atom4_plot, atom5_plot, atom6_p
 
 In the _Atoms_ series, _Sleeping At Last_ tries to catch small interesting events and turns them in a song of approximately one minute.
 
-In _Atom 1_, we hear a lof of different sounds coming together. It can be heard that the tempo is certianly not constant. This can also be seen in the tempogram.
+In _Atom 1_, we hear a lof of different sounds coming together. It can be heard that the tempo is certainly not constant. This can also be seen in the tempogram.
 
 In _Atom 2_, a melody that is constant in tempo can be heard in the first sixteen seconds. This can also be seen in the tempogram: there is a horizontal line at 400 BPM. After this singing comes in. After each sentence, there is a little instrumental part again, which can also be found in the tempogram. This are the little horizontal lines on that same 400 BPM. The singing can also be found in the tempogram, but at a bit higher level and is not as constant as the instrumental parts.
 
@@ -250,18 +111,9 @@ In _Atom 7_ and _Atom 9_, a clear melody can be heard throughout the whole song.
 
 ### Tempogram of _Hearing_ [temporal features]
 
-```{r hearing setup, echo=FALSE}
-hearing <- get_tidy_audio_analysis('13Z3uZXTFpbLBZ8R1rTUKO')
-```
-
 ```{r hearing tempogram, echo=FALSE}
-hearing |>
-  tempogram(window_size = 8, hop_size = 1, cyclic = FALSE) |>
-  ggplot(aes(x = time, y = bpm, fill = power)) +
-  geom_raster() +
-  scale_fill_viridis_c(guide = "none") +
-  labs(x = "Time (s)", y = "Tempo (BPM)") +
-  theme_classic()
+hearing_plot <- readRDS(file = "data/hearing.RDS")
+hearing_plot
 ```
 
 ***
@@ -269,19 +121,11 @@ hearing |>
 The song _Hearing_ is part of _Sleeping At Lasts_ Atlas series. In this series ... (to be updated with background info).
 In the song there is a melody that repeats itself the whole song. However, this melody does not have a constant tempo. The tempo calculated by Spotify probably listens to the stringed instruments. Around 2:40 until a bit after 3:00, the string instruments deviate from the melody which can be seen in the tempogram. 
 
-### Tempogram _Everything she does is magic_ by _Sleeping At Last
-```{r magic setup, echo=FALSE}
-magic <- get_tidy_audio_analysis('3cBtANnJGopPaRMXCl3mV7')
-```
+### Tempogram _Everything she does is magic_ by _Sleeping At Last_
 
 ```{r magic tempogram, echo=FALSE}
-magic |>
-  tempogram(window_size = 8, hop_size = 1, cyclic = FALSE) |>
-  ggplot(aes(x = time, y = bpm, fill = power)) +
-  geom_raster() +
-  scale_fill_viridis_c(guide = "none") +
-  labs(x = "Time (s)", y = "Tempo (BPM)") +
-  theme_classic()
+magic_plot <- readRDS(file = "data/magic.RDS")
+magic_plot
 ```
 
 ***
@@ -290,18 +134,9 @@ In the song _Everything she does is magic_ from _Sleeping At Last_, we can see t
 
 ### Unrelated but might be fun [temporal features]
 
-```{r opus setup, echo=FALSE}
-opus <- get_tidy_audio_analysis('3v2oAQomhOcYCPPHafS3KV')
-```
-
 ```{r opus tempogram, echo=FALSE}
-opus |>
-  tempogram(window_size = 8, hop_size = 1, cyclic = FALSE) |>
-  ggplot(aes(x = time, y = bpm, fill = power)) +
-  geom_raster() +
-  scale_fill_viridis_c(guide = "none") +
-  labs(x = "Time (s)", y = "Tempo (BPM)") +
-  theme_classic()
+opus_plot <- readRDS(file = "data/opus.RDS")
+opus_plot
 ```
 
 ***
@@ -311,21 +146,8 @@ In the song [_Opus_](https://open.spotify.com/track/3v2oAQomhOcYCPPHafS3KV?si=31
 ### Histogram of tempi [track-level features]
 
 ```{r tempo histogram, echo=FALSE}
-colors <- RColorBrewer::brewer.pal(7, "PuOr")
-labels <- c('C','C#/Db','D','D#/Eb','E','F','F#/Gb','G','G#/Ab','A','A#/Bb','B')
-
-tempo <- ggplot(corpus) + 
-  geom_histogram(aes(tempo, y=..density.., color=as.factor(sleeping), fill=as.factor(sleeping)), position="identity", lwd=0.2, alpha=0.6, binwidth=10) +
-  scale_color_manual(values=c(colors[1], colors[7]), labels = c("Other songs", "Sleeping At Last songs")) +
-  scale_fill_manual(values=c(colors[2], colors[6]), labels = c("Other songs", "Sleeping At Last songs")) +
-  labs(color='', fill='', x='Tempo', y='Relative density')
-
-theme <- theme_minimal() +
-  theme(panel.grid.minor=element_blank(),
-        axis.line=element_line(), 
-        plot.title = element_text(hjust = 0.5))
-
-tempo + theme + theme(panel.grid = element_blank(), legend.position=c(0.8,0.9))
+tempo_plot <- readRDS(file = "data/tempo.RDS")
+tempo_plot
 ```
 
 ***
@@ -334,125 +156,10 @@ In this histogram it can be seen that _Sleeping At Last_ has more songs with a t
 
 ### Keygram of _June 24, 2022: Parade of Planets_ [tonal analysis]
 
-```{r keygram setup, echo=FALSE}
-circshift <- function(v, n) {
-  if (n == 0) v else c(tail(v, n), head(v, -n))
-}
-
-#      C     C#    D     Eb    E     F     F#    G     Ab    A     Bb    B
-major_chord <-
-  c(   1,    0,    0,    0,    1,    0,    0,    1,    0,    0,    0,    0)
-minor_chord <-
-  c(   1,    0,    0,    1,    0,    0,    0,    1,    0,    0,    0,    0)
-seventh_chord <-
-  c(   1,    0,    0,    0,    1,    0,    0,    1,    0,    0,    1,    0)
-
-major_key <-
-  c(6.35, 2.23, 3.48, 2.33, 4.38, 4.09, 2.52, 5.19, 2.39, 3.66, 2.29, 2.88)
-minor_key <-
-  c(6.33, 2.68, 3.52, 5.38, 2.60, 3.53, 2.54, 4.75, 3.98, 2.69, 3.34, 3.17)
-
-chord_templates <-
-  tribble(
-    ~name, ~template,
-    "Gb:7", circshift(seventh_chord, 6),
-    "Gb:maj", circshift(major_chord, 6),
-    "Bb:min", circshift(minor_chord, 10),
-    "Db:maj", circshift(major_chord, 1),
-    "F:min", circshift(minor_chord, 5),
-    "Ab:7", circshift(seventh_chord, 8),
-    "Ab:maj", circshift(major_chord, 8),
-    "C:min", circshift(minor_chord, 0),
-    "Eb:7", circshift(seventh_chord, 3),
-    "Eb:maj", circshift(major_chord, 3),
-    "G:min", circshift(minor_chord, 7),
-    "Bb:7", circshift(seventh_chord, 10),
-    "Bb:maj", circshift(major_chord, 10),
-    "D:min", circshift(minor_chord, 2),
-    "F:7", circshift(seventh_chord, 5),
-    "F:maj", circshift(major_chord, 5),
-    "A:min", circshift(minor_chord, 9),
-    "C:7", circshift(seventh_chord, 0),
-    "C:maj", circshift(major_chord, 0),
-    "E:min", circshift(minor_chord, 4),
-    "G:7", circshift(seventh_chord, 7),
-    "G:maj", circshift(major_chord, 7),
-    "B:min", circshift(minor_chord, 11),
-    "D:7", circshift(seventh_chord, 2),
-    "D:maj", circshift(major_chord, 2),
-    "F#:min", circshift(minor_chord, 6),
-    "A:7", circshift(seventh_chord, 9),
-    "A:maj", circshift(major_chord, 9),
-    "C#:min", circshift(minor_chord, 1),
-    "E:7", circshift(seventh_chord, 4),
-    "E:maj", circshift(major_chord, 4),
-    "G#:min", circshift(minor_chord, 8),
-    "B:7", circshift(seventh_chord, 11),
-    "B:maj", circshift(major_chord, 11),
-    "D#:min", circshift(minor_chord, 3)
-  )
-
-key_templates <-
-  tribble(
-    ~name, ~template,
-    "Gb:maj", circshift(major_key, 6),
-    "Bb:min", circshift(minor_key, 10),
-    "Db:maj", circshift(major_key, 1),
-    "F:min", circshift(minor_key, 5),
-    "Ab:maj", circshift(major_key, 8),
-    "C:min", circshift(minor_key, 0),
-    "Eb:maj", circshift(major_key, 3),
-    "G:min", circshift(minor_key, 7),
-    "Bb:maj", circshift(major_key, 10),
-    "D:min", circshift(minor_key, 2),
-    "F:maj", circshift(major_key, 5),
-    "A:min", circshift(minor_key, 9),
-    "C:maj", circshift(major_key, 0),
-    "E:min", circshift(minor_key, 4),
-    "G:maj", circshift(major_key, 7),
-    "B:min", circshift(minor_key, 11),
-    "D:maj", circshift(major_key, 2),
-    "F#:min", circshift(minor_key, 6),
-    "A:maj", circshift(major_key, 9),
-    "C#:min", circshift(minor_key, 1),
-    "E:maj", circshift(major_key, 4),
-    "G#:min", circshift(minor_key, 8),
-    "B:maj", circshift(major_key, 11),
-    "D#:min", circshift(minor_key, 3)
-  )
-```
-
-```{r keychram corpus setup, echo=FALSE}
+```{r astronomy keychram, echo=FALSE}
 astronomy_key <- get_track_audio_features("4kZhLfs3nsJu8JBqEXdxNW")$key
-
-astronomy <-
-  get_tidy_audio_analysis("4kZhLfs3nsJu8JBqEXdxNW") |>
-  compmus_align(sections, segments) |>
-  select(sections) |>
-  unnest(sections) |>
-  mutate(
-    pitches =
-      map(segments,
-        compmus_summarise, pitches,
-        method = "mean", norm = "manhattan"
-      )
-  )
-```
-
-```{r keygram, echo=FALSE}
-astronomy |> 
-  compmus_match_pitch_template(
-    key_templates,         # Change to chord_templates if desired
-    method = "cosine",  # Try different distance metrics
-    norm = "chebyshev"     # Try different norms
-  ) |>
-  ggplot(
-    aes(x = start + duration / 2, width = duration, y = name, fill = d)
-  ) +
-  geom_tile() +
-  scale_fill_viridis_c(guide = "none") +
-  theme_minimal() +
-  labs(x = "Time (s)", y = "")
+astronomy_plot <- readRDS(file = "data/astronomy.RDS")
+astronomy_plot
 ```
 
 ***
@@ -464,22 +171,8 @@ When we take a closer look at the song, it can be seen that the song starts in B
 ### Histogram of keys [track-level features]
 
 ```{r histogram keys, echo=FALSE}
-colors <- RColorBrewer::brewer.pal(7, "PuOr")
-labels <- c('C','C#/Db','D','D#/Eb','E','F','F#/Gb','G','G#/Ab','A','A#/Bb','B')
-
-duration <- ggplot(corpus) + 
-  geom_histogram(aes(key, y=..density.., color=as.factor(sleeping), fill=as.factor(sleeping)), position="identity", lwd=0.2, alpha=0.6, binwidth=1) +
-  scale_color_manual(values=c(colors[1], colors[7]), labels = c("Other songs", "Sleeping At Last songs")) +
-  scale_fill_manual(values=c(colors[2], colors[6]), labels = c("Other songs", "Sleeping At Last songs")) +
-  scale_x_continuous(breaks=0:11, labels=labels) +
-  labs(color='', fill='', x='Key', y='Relative density')
-
-theme <- theme_minimal() +
-  theme(panel.grid.minor=element_blank(),
-        axis.line=element_line(), 
-        plot.title = element_text(hjust = 0.5))
-
-duration + theme + theme(panel.grid = element_blank(), legend.position=c(0.8,0.8))
+key_plot <- readRDS(file = "data/keys.RDS")
+key_plot
 ```
 
 ***
@@ -489,21 +182,8 @@ In this histogram it can be seen that _Sleeping At Last_ has more songs in the C
 ### Valence, acousticness, danceability and instrumentalness [track-level features]
 
 ```{r track-level features plot, echo=FALSE}
-plot <- ggplot(corpus) +
-  geom_point(aes(x=valence, y=acousticness, size=danceability, color=instrumentalness, text=track.name), alpha=0.4, shape=21) +
-  geom_rug(aes(x=valence, y=acousticness, color=instrumentalness)) +
-  facet_grid(cols = vars(sleeping), labeller=as_labeller(c(`0`='Other songs', `1`='Sleeping At Last songs'))) +
-  labs(title='Different track-level features of Sleeping At Last songs\ncompared to other songs in the chosen playlist') +
-  scale_color_distiller(palette='PuOr') + 
-  scale_x_continuous(breaks=c(0,0.5,1),limits=c(0,1)) +
-  scale_y_continuous(breaks=c(0,0.5,1), limits=c(0,1))
-
-theme <- theme_minimal() +
-  theme(panel.grid.minor=element_blank(),
-        axis.line=element_line(), 
-        plot.title = element_text(hjust = 0.5))
-
-ggplotly(plot + theme)
+track_plot <- readRDS(file = "data/track.RDS")
+track_plot
 ```
 
 ***
@@ -514,31 +194,9 @@ In addition, the proportion of instrumental songs seems to be bigger in the _Sle
 
 ### Duration [track-level features]
 
-```{r duration setup, include=FALSE}
-corpus <- corpus %>%
-  mutate(track.duration_min = track.duration_ms / (1000 * 60))
-
-duration_mean_sleeping <- corpus %>%
-  filter(sleeping == 1) %>%
-  summarize(mean = mean(track.duration_min))
-
-duration_mean_other <- corpus %>%
-  filter(sleeping == 0) %>%
-  summarize(mean = mean(track.duration_min))
-```
-
 ```{r duration plot, echo=FALSE}
-colors <- RColorBrewer::brewer.pal(7, "PuOr")
-
-duration <- ggplot(corpus) + 
-  geom_histogram(aes(track.duration_min, y=..density.., color=as.factor(sleeping), fill=as.factor(sleeping)), position="identity", lwd=0.2, alpha=0.6, binwidth=0.25) +
-  geom_vline(xintercept=duration_mean_sleeping$mean, color=colors[7], linetype='dotdash') +
-  geom_vline(xintercept=duration_mean_other$mean, color=colors[1], linetype='dotdash') +
-  scale_color_manual(values=c(colors[1], colors[7]), labels = c("Other songs", "Sleeping At Last songs")) +
-  scale_fill_manual(values=c(colors[2], colors[6]), labels = c("Other songs", "Sleeping At Last songs")) +
-  labs(color='', fill='', x='Duration (min)', y='Relative density')
-
-duration + theme + theme(panel.grid = element_blank(), legend.position=c(0.8,0.8))
+duration_plot <- readRDS(file = "data/duration.RDS")
+duration_plot
 ```
 
 ***
@@ -547,33 +205,9 @@ In this plot it can be seen that the songs from _Sleeping At Last_ are shorter i
 
 ### Chromagram of the song _Dark Horse_ by _Sleeping At Last_ [chroma features]
 
-```{r chroma sleeping setup, echo=FALSE}
-dark_horse_sleeping <- get_tidy_audio_analysis("1i5PW20LSYwCQMjVQgSXVM") %>%
-  select(segments) %>%
-  unnest(segments) %>%
-  select(start, duration, pitches)
-
-norms_chroma <- list("euclidean", "manhattan", "chebyshev")
-dists_chroma <- list("manhattan", "aitchison", "cosine", "angular")
-summary_chroma <- list("mean", "aitchison_centre", "root_mean_square", "max")
-```
-
 ```{r chroma sleeeping, echo=FALSE}
-dark_horse_sleeping |>
-  mutate(pitches = map(pitches, compmus_normalise, norms_chroma[3])) |>
-  compmus_gather_chroma() |> 
-  ggplot(
-    aes(
-      x = start + duration / 2,
-      width = duration,
-      y = pitch_class,
-      fill = value
-    )
-  ) +
-  geom_tile() +
-  labs(x = "Time (s)", y = NULL, fill = "Magnitude") +
-  theme_minimal() +
-  scale_fill_viridis_c()
+dark_horse_sleeping_plot <- readRDS(file = "data/dark_horse_sleeping_plot.RDS") 
+dark_horse_sleeping_plot
 ```
 
 ***
@@ -582,35 +216,9 @@ In this chromagram the song _Dark Horse_ by _Sleeping At Last_ is shown using th
 
 ### Differences in tempo of the song _Dark Horse_ by _Katy Perry_ and _Sleeping At Last_ [chroma features]
 
-```{r dtw setup, echo=FALSE}
-dark_horse_katy <- get_tidy_audio_analysis("4jbmgIyjGoXjY01XxatOx6") %>%
-  select(segments) %>%
-  unnest(segments) %>%
-  select(start, duration, pitches)
-```
-
 ```{r dynamic time warping plot, echo=FALSE}
-dark_horse_dist <- compmus_long_distance(
-  dark_horse_katy %>% mutate(pitches = map(pitches, compmus_normalise, norms_chroma[3])),
-  dark_horse_sleeping %>% mutate(pitches = map(pitches, compmus_normalise, norms_chroma[3])),
-  feature = pitches,
-  method = dists_chroma[2]
-)
-
-dark_horse <- dark_horse_dist %>%
-  mutate(dark_horse_sleeping = xstart + xduration / 2,
-         dark_horse_katy = ystart + yduration / 2) %>%
-  ggplot(aes(x=dark_horse_sleeping, y=dark_horse_katy, fill=d)) +
-    geom_tile(aes(width=xduration, height=yduration)) +
-    coord_fixed() + 
-    scale_x_continuous(breaks=c(16,51,89,123,163,192,209,221), labels=c("I knew you were", "So you wanna play with magic?", "Mark my words", "So you wanna play with magic?", "So you wanna play with magic?", "There's no going back (first time)", "There's no going back (last time)", "")) + 
-    scale_y_continuous(breaks = c(15, 45, 80, 110, 139, 183, 210, 216), labels=c("I knew you were", "So you wanna play with magic?", "Mark my words", "So you wanna play with magic?", "Uh, she's a beast", "So you wanna play with magic?", "There's no going back", "")) + 
-    scale_fill_viridis_c(option = "E", guide = "none") +
-    theme_classic() +
-    theme(axis.text.x = element_text(angle = 30, hjust = 1)) +
-    labs(x = "Sleeping At Last", y = "Katy Perry")
-
-dark_horse
+dark_horse_plot <- readRDS(file = "data/dark_horse.RDS")
+dark_horse_plot
 ```
 
 ***
@@ -622,28 +230,8 @@ At the end of the song, _Sleeping At Last_ deviates from the original song by sk
 ### Chromagram of the song _Taste_ from _Sleeping At Last_ [chroma features]
 
 ```{r chroma taste, echo=FALSE}
-taste <- get_tidy_audio_analysis("6usFrqlplLLU9OUDq936iE") %>%
-  select(segments) %>%
-  unnest(segments) %>%
-  select(start, duration, pitches)
-
-taste_chrom <- taste |>
-  mutate(pitches = map(pitches, compmus_normalise, norms_chroma[3])) |>
-  compmus_gather_chroma() |> 
-  ggplot(
-    aes(
-      x = start + duration / 2,
-      width = duration,
-      y = pitch_class,
-      fill = value
-    )
-  ) +
-  geom_tile() +
-  labs(x = "Time (s)", y = NULL, fill = "Magnitude") +
-  theme_minimal() +
-  scale_fill_viridis_c()
-
-ggplotly(taste_chrom)
+taste_plot <- readRDS(file = "data/taste.RDS")
+taste_plot
 ```
 
 ***
@@ -653,75 +241,8 @@ What can. we see here?
 ### Structure of the song _Taste_ from _Sleeping At Last_ [chroma and timbre features] {data-commentary-width=450}
 
 ```{r self sim, echo=FALSE}
-norms_timbre <- list("euclidean", "manhattan", "chebyshev")
-dists_timbre <- list("euclidean", "cosine", "angular")
-summary_timbre <- list("mean", "root_mean_square")
-
-taste2 <-
-  get_tidy_audio_analysis("6usFrqlplLLU9OUDq936iE") |>
-  compmus_align(bars, segments) |>
-  select(bars) |>
-  unnest(bars) |>
-  mutate(
-    pitches =
-      map(segments,
-        compmus_summarise, pitches,
-        method = summary_chroma[4], norm = norms_chroma[3]
-      )
-  ) |>
-  mutate(
-    timbre =
-      map(segments,
-        compmus_summarise, timbre,
-        method = summary_timbre[1]
-      )
-  )
-```
-
-```{r self sim matrices, echo=FALSE}
-self_sim <- bind_rows(
-  taste2 |> 
-    compmus_self_similarity(pitches, dists_chroma[1]) |> 
-    mutate(d = d / max(d), type = "Chroma"),
-  taste2 |> 
-    compmus_self_similarity(timbre, dists_timbre[2]) |> 
-    mutate(d = d / max(d), type = "Timbre")
-) |>
-  mutate() |> 
-  ggplot(
-    aes(
-      x = xstart + xduration / 2,
-      width = xduration,
-      y = ystart + yduration / 2,
-      height = yduration,
-      fill = d
-    )
-  ) +
-  geom_tile() +
-  coord_fixed() +
-  facet_wrap(~type) +
-  scale_fill_viridis_c(option = "E", guide = "none") +
-  theme_classic() + 
-  labs(x = "", y = "")
-
-self_sim_ggplotly <- ggplotly(self_sim, domain = list(x=c(0,1), y=c(0.6,1)))
-
-parts <- data.frame(
-  Chroma = c("0:00 - 0:23", "0:23 - 0:49", "0:49 - 1:12", "1:12 - 1:20", "1:20 - 2:28", ""), 
-  Timbre = c("0:00 - 0:23", "0:23 - 1:12", "", "1:12 - 1:20", "1:20 - 1:24", "1:24 - 1:28"),
-  Chroma2 = c("", "2:28 - 3:08", "3:08 - 4:11", "", "4:11 - 4:19", ""), 
-  Timbre2 = c("1:28 - 2:28", "2:28 - 3:08", "3:08 - 3:35", "3:35 - 4:11", "4:11 - 4:19", ""))
-```
-
-```{r subplot, echo=FALSE}
-parts_table <- plot_ly(
-    type = 'table',
-    domain = list(x=c(0,1), y=c(0,0.4)),
-    header = list(values = c("Chroma", "Timbre", "Chroma", "Timbre")),
-    cells = list(values = rbind(parts$Chroma, parts$Timbre, parts$Chroma2, parts$Timbre2), height=25)
-  )
-
-subplot(self_sim_ggplotly, parts_table, nrows=2)
+taste2_plot <- readRDS(file = "data/taste2.RDS")
+taste2_plot
 ```
 
 ***

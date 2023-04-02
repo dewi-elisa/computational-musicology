@@ -1,0 +1,20 @@
+library(tidyverse)
+library(spotifyr)
+library(plotly)
+library(compmus)
+library(fontawesome)
+library(gridExtra)
+
+atom1_plot <- readRDS(file = "data/atom1.RDS")
+atom2_plot <- readRDS(file = "data/atom2.RDS")
+atom3_plot <- readRDS(file = "data/atom3.RDS")
+atom4_plot <- readRDS(file = "data/atom4.RDS")
+atom5_plot <- readRDS(file = "data/atom5.RDS")
+atom6_plot <- readRDS(file = "data/atom6.RDS")
+atom7_plot <- readRDS(file = "data/atom7.RDS")
+atom8_plot <- readRDS(file = "data/atom8.RDS")
+atom9_plot <- readRDS(file = "data/atom9.RDS")
+
+atom_plot <- grid.arrange(atom1_plot, atom2_plot, atom3_plot, atom4_plot, atom5_plot, atom6_plot, atom7_plot, atom8_plot, atom9_plot, nrow=3)
+
+saveRDS(object = atom_plot, file = "data/atoms.RDS")
