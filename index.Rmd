@@ -41,6 +41,7 @@ library(plotly)
 library(compmus)
 library(fontawesome)
 library(gridExtra)
+library(rpart.plot)
 ```
 
 # `r fa("house-chimney")`  Introduction {.storyboard}
@@ -75,10 +76,10 @@ Both in the sense of the subject and the kind of music and instruments.
 Moreover, it would be nice to look at one or more of the songs that are included in a film or TV series and compare it to another song in that film or TV series to see what is so special about this song being there.
 Furthermore, one or more of his covers can be compared to the original to see how the styles differ and get to know more about this specific style of _Sleeping At Last_.
 
-I think that _Sleeping At Last_ songs in general are more calm than the other songs in the corpus. Moreover, I think that the use of specific instruments that are not used a lot in the rest of the corpus will make the songs sound different from the other songs. 
+I think that _Sleeping At Last_ songs in general are more calm and also more instrumental than the other songs in the corpus. Moreover, I think that the use of specific instruments that are not used a lot in the rest of the corpus will make the songs sound different from the other songs. 
 
 In the other tabs, analysis and information can be found about feeling, sound and tempo of _Sleeping At Last_ songs. 
-The findings that were found during the analysis are summarized in the conclusion section, where the corpus will also be tried to be grouped according to these conclusions.
+The findings that were found during the analysis are summarized in the results section, where the corpus will also be tried to be divided in a decision tree according to these conclusions.
 
 ***
 
@@ -86,19 +87,9 @@ The findings that were found during the analysis are summarized in the conclusio
 
 <!-- To do lijstje: -->
 <!-- * word cloud met titels -->
-<!-- * volgorde grafiekjes omdraaien: eerst sleeping at last, dan overig -->
-<!-- * andere afstandsmetingen gebruiken in chroma plotje -->
-<!-- * chromatogram -->
-<!-- * flexdash thema -->
-<!-- * titels en assen van plotjes nog een keer checken -->
-<!-- * in-text linkjes naar alle liedjes -->
-<!-- * {data-commentary-width=400} -->
-<!-- * alle songs embedden -->
 
 <!-- Feedback om te verwerken: -->
-<!-- *  Meer verwachtingen in de introductie -->
 <!-- *  The only downside I can think of is that you have so many songs that the size of the danceability gets lost a bit. But I really like the darker clusters in the graph. Think about what they mean and explain them. -->
-<!-- * One plot that might also help, especially with the amount of "Other songs" would be a barplot with the x axis being one of the features and the y axis being the song count or proportions, giving you more insights on the ratios instead of concrete numbers. -->
 
 <!-- # What characteristics do _Sleeping At Last_ songs have? {data-icon="fa-music"} -->
 
@@ -137,7 +128,7 @@ key_plot
 
 ***
 
-In this histogram it can be seen that _Sleeping At Last_ has more songs in the C and D#/Eb keys and less songs in the C#/Db, D, E, and A keys in general. 
+In this histogram it can be seen that _Sleeping At Last_ has more songs in the C and D#/Eb keys and less songs in the C#/Db, D, E, and A keys in general. In the other tabs about sound there will be looked at the chroma and timbre inside a song and what that can say about that song.
 
 
 ### Keygram of _June 24, 2022: Parade of Planets_ [tonal analysis]
@@ -207,7 +198,7 @@ tempo_plot
 
 ***
 
-In this histogram it can be seen that _Sleeping At Last_ has more songs with a tempo lower than 80 and with a tempo between 120 and 160 in general when comparing it with the other songs in the playlist. 
+In this histogram it can be seen that _Sleeping At Last_ has more songs with a tempo lower than 80 and with a tempo between 120 and 160 in general when comparing it with the other songs in the playlist. In other tabs about tempo there will be looked at the tempo within a song and what this can say about that song.
 
 ### Tempogram of the Atom series [temporal features]
 
@@ -245,7 +236,7 @@ In [_Atom 7_](https://open.spotify.com/track/3KD3qVfZd6C7ERAaCYkhTn?si=42f4ad0e3
 ### Tempogram of _Hearing_ [temporal features]
 
 ```{r hearing tempogram, echo=FALSE}
-hearing_plot <- readRDS(file = "data/hearing.RDS")
+hearing_plot <- readRDS(file = "data/hearing_cyclic.RDS")
 hearing_plot
 ```
 
@@ -259,8 +250,8 @@ In the song there is a melody that repeats itself the whole song. However, this 
 
 ### Tempogram _Everything she does is magic_ by _Sleeping At Last_
 
-```{r magic tempogram, echo=FALSE}
-magic_plot <- readRDS(file = "data/magic.RDS")
+```{r}
+magic_plot <- readRDS(file = "data/magic_cyclic.RDS")
 magic_plot
 ```
 
@@ -289,9 +280,39 @@ At the end of the song, _Sleeping At Last_ deviates from the original song by sk
 
 # `r fa("magnifying-glass")`  Results{.storyboard}
 
-SAL does not have many regular tempo songs.
+### Feeling, sound and tempo
+
+**Feeling**
+
+Compared with the other song in the corpus, _Sleeping At Last_ makes songs that have a higher acousticness, but lower valence and danceability in general. Moreover, in proportion, he makes more instrumental songs. The songs in general are also shorter. This is in agreement with the hypothesis that _Sleeping At Last_ songs are more calm and instrumental.
+
+
+**Sound**
+
+When looking at the sound of the song from _Sleeping At Last_, we saw that the instruments that are used a lot are the piano, the violin, the cello and singing. This gives the songs a certain vibe which I think is very specific to _Sleeping At Last_.
+
+
+**Tempo**
+
+Lastly, we saw that _Sleeping At Last_ does not have many regular tempo songs: most songs are either slow or fast. When taking a closer look, we could see that is often was not clear which tempo the song had. This probably has to do with the instruments that are used and how the Spotify algorithm works. 
+
+### Decision Tree
+```{r decision tree, echo=FALSE}
+tree <- readRDS(file = "data/tree.RDS")
+colors <- readRDS(file = "data/colors.RDS")
+accuracy <- readRDS(file = "data/accuracy.RDS")
+rpart.plot(tree, type=5, fallen.leaves = TRUE, box.palette = c(colors[2], colors[6]), )
+```
+
+***
+
+To see if we can divide the corpus into _Sleeping At Last_ songs and other songs, a decision tree was made. The tree took into account: danceability, valence, acousticness, instrumentalness, tempo and key. The decision tree was trained on 90% of the data and tested with the other 10%. On the 10%, it had an accuracy of `r accuracy`. The tree was prepruned to have a maximum depth of 5 and a minimum split of 10.
+
+The desision tree supports the claims that were made in the results: _Sleeping At Last_ songs have a high acousticness and a high instrumentalness.
 
 # `r fa("star")`  Extra {.storyboard}
+
+### Tempgram of _Opus_
 
 ```{r opus tempogram, echo=FALSE}
 opus_plot <- readRDS(file = "data/opus.RDS")
