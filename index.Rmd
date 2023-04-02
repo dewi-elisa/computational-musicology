@@ -52,7 +52,7 @@ library(rpart.plot)
 corpus <- readRDS(file = "data/corpus.RDS")
 ```
 
-My corpus is a playlist with `r nrow(corpus)` songs.
+My corpus is a playlist with `r nrow(corpus)` songs. To gain a little bit more insight into this playlist I created a word cloud (in the next tab, due to a bug in wordcloud I cannot put 2 word clouds on the same page. So I decided to get both of them their own tab).
 What do all the songs have in common?
 They are all songs I like.
 It is a very diverse list with songs ranging from film music to _Shawn Mendes_ to _The Sidh_ to _Maria Mena_.
@@ -69,7 +69,7 @@ What makes _Sleeping At Last_ _Sleeping At Last_?
 Why is this the artist I listen to most often?
 Are there other artists with the same characteristics?
 
-I think that to get an even deeper understanding of the style of _Sleeping At Last_, there are a few songs that are most interesting to look at.
+I also made a word cloud from the titles of all _Sleeping At Last_ songs (in one of the other tabs). I think that to get an even deeper understanding of the style of _Sleeping At Last_, there are a few songs that are most interesting to look at.
 First, one or more _astronomy_ songs from _Sleeping At Last_.
 These are the songs that are very typical for _Sleeping At Last_.
 Both in the sense of the subject and the kind of music and instruments.
@@ -85,13 +85,20 @@ The findings that were found during the analysis are summarized in the results s
 
 <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/3jblLN3iqoULSfQGHAFYVe?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
 
-<!-- To do lijstje: -->
-<!-- * word cloud met titels -->
+### Word Cloud Corpus Songs
 
-<!-- Feedback om te verwerken: -->
-<!-- *  The only downside I can think of is that you have so many songs that the size of the danceability gets lost a bit. But I really like the darker clusters in the graph. Think about what they mean and explain them. -->
+```{r word cloud, echo=FALSE}
+word_cloud <- readRDS(file = "data/word.RDS")
+word_cloud
+```
 
-<!-- # What characteristics do _Sleeping At Last_ songs have? {data-icon="fa-music"} -->
+### Word Cloud Sleeping At Last songs
+
+```{r word cloud sleeping, echo=FALSE}
+word_cloud2 <- readRDS(file = "data/word_sleeping.RDS")
+word_cloud2
+```
+![](2.png)
 
 # `r fa("heart")`  Feeling {.storyboard}
 ### Valence, acousticness, danceability and instrumentalness [track-level features]
@@ -160,6 +167,21 @@ In this chromagram the song [_Dark Horse_](https://open.spotify.com/track/1i5PW2
 
 <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/1i5PW20LSYwCQMjVQgSXVM?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
 
+### Chromagram of the song _Taste_ from _Sleeping At Last_ [chroma features]
+
+```{r chroma taste, echo=FALSE}
+taste_plot <- readRDS(file = "data/taste.RDS")
+taste_plot
+```
+
+***
+
+This is a chromagram of the song [_Taste_](https://open.spotify.com/track/6we2POU5MK1mpLACndFlG5?si=82c4e3b24a3246e9) from _Sleeping At Last_. The song mostly is in the D key. However, sometimes it goes to A, G#/Ab, G, F#Gb or F. The first two times, around 60 seconds and around 120 seconds, this happens when a kind of explosion can be heard in the music. The last time, from around 200 seconds, a new rhythm with different instruments can be heard.
+
+In the next tab the structure of the song will be analysed.
+
+<iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/6we2POU5MK1mpLACndFlG5?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+
 ### Structure of the song _Taste_ from _Sleeping At Last_ [chroma and timbre features] {data-commentary-width=450}
 
 ```{r self sim, echo=FALSE}
@@ -176,17 +198,6 @@ At the start of the song, a little melody can be heard which continues throughou
 When the music instruments change, it can be seen that the timbre graph changes. We can see some instrument groups reappearing throughout the music. This can also be heard. You hear a flute and some background music coming and going throughout the song. But also the starting instruments are coming back in the song. However, if there is only a change in melody and not in instruments, we can see the chroma graph changing. This is the case, for example, after one of the 'explosions' you can hear in the song. If the melody as well as the music instruments change, this is shown in both graphs.
 
 <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/6we2POU5MK1mpLACndFlG5?utm_source=generator" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-
-### Chromagram of the song _Taste_ from _Sleeping At Last_ [chroma features]
-
-```{r chroma taste, echo=FALSE}
-taste_plot <- readRDS(file = "data/taste.RDS")
-taste_plot
-```
-
-***
-
-What can. we see here?
 
 # Tempo {.storyboard data-icon="fa-stopwatch"}
 ### Histogram of tempi [track-level features]
